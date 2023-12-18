@@ -13,3 +13,7 @@ At Ensosense, we're passionate about curating an eclectic blend of art that reso
 🤝 We value your artistic journey! Connect with us to share your inspirations and artistic desires. Our dedicated team is committed to ensuring you find the perfect piece that speaks to your soul.
 
 Explore our collection and embark on a visual odyssey with Ensosense! Visit us often as our gallery is continually evolving to bring you fresh, awe-inspiring creations.
+
+## Project Status
+
+This project is currently under development and is not yet production-ready. Expect frequent updates and changes as we progress.
