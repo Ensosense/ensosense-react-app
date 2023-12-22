@@ -2,21 +2,25 @@ import { useEffect, useState } from "react";
 import ArtworkModel from "../../models/ArtworkModel";
 import { SpinnerLoading } from "../Utils/SpinnerLoading";
 import { SearchArtwork } from "./components/SearchBook";
+import { Pagination } from "../Utils/Pagination";
 
 export const SearchArtworksPage = () => {
 
     const [artworks, setArtworks] = useState<ArtworkModel[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [artworksPerPage] = useState(5);
+    const [totalAmountsOfArtworks, setTotalAmountsOfArtworks] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
 
 
     useEffect(() => {
-
         const fetchArtworks = async () => {
 
-            const baseUrl: string = "http://localhost:8080/artworks";
+            const baseUrl: string = "http://localhost:8080/api/artworks";
 
-            const url: string = `${baseUrl}?page=0&size=5`;
+            const url: string = `${baseUrl}?page=${currentPage - 1}&size=${artworksPerPage}`;
 
             const response = await fetch(url);
 
@@ -25,8 +29,14 @@ export const SearchArtworksPage = () => {
             }
 
             const responseJson = await response.json();
+            console.log(responseJson)
 
             const responseData = responseJson;
+
+
+            setTotalAmountsOfArtworks(responseJson.page.totalElements);
+            setTotalPages(responseJson.page.totalPages);
+         
 
             const loadedArtworks: ArtworkModel[] = [];
 
@@ -65,6 +75,12 @@ export const SearchArtworksPage = () => {
             </div>
         )
     }
+
+    const indexOfLastArtwork: number = currentPage * artworksPerPage;
+    const indexOfFirstartwork: number = indexOfLastArtwork - artworksPerPage;
+    let lastItem = artworksPerPage * currentPage <= totalAmountsOfArtworks ? artworksPerPage * currentPage : totalAmountsOfArtworks;
+
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     return (
         <div>
@@ -113,17 +129,18 @@ export const SearchArtworksPage = () => {
                                     </li>
                                 </ul>
                             </div>
-                        </div>   
+                        </div>
                     </div>
                     <div className='mt-3'>
-                                <h5>Number of results(22)</h5>
-                            </div>
-                            <p>
-                                1 to 5 of 22 items:
-                            </p>
-                            {artworks.map(artwork => (
-                                <SearchArtwork artwork={artwork} key={artwork.id} />
-                            ))}
+                        <h5>Number of results(22)</h5>
+                    </div>
+                    <p>
+                        1 to 5 of 22 items:
+                    </p>
+                    {artworks.map(artwork => (
+                        <SearchArtwork artwork={artwork} key={artwork.id} />
+                    ))}
+                    {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />}
                 </div>
             </div>
         </div>
