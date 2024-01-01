@@ -12,14 +12,14 @@ export const ReturnArtwork: React.FC<{ artwork: ArtworkModel }> = (props) => {
                           src={props.artwork.img}
                           width='151'
                           height='233'
-                          alt="book"
+                          alt="artwork"
                       />
                     :
                     <img
                         src={require('./../../../Images/Artworkimages/piece-1.png')}
                         width='151'
                         height='233'
-                        alt="book"
+                        alt="artwork"
                     />
                 }
                 <h6 className='mt-2'>{props.artwork.title}</h6>

@@ -1,6 +1,7 @@
 import ArtworkModel from "../../../models/ArtworkModel";
 
-export const SearchArtwork: React.FC<{ artwork: ArtworkModel}> = (props) => {
+export const SearchArtwork: React.FC<{artwork: ArtworkModel}> = (props) => {
+   
     return(
         <div className='card mt-3 shadow p-3 mb-3 bg-body rounded'>
         <div className='row g-0'>
@@ -16,7 +17,7 @@ export const SearchArtwork: React.FC<{ artwork: ArtworkModel}> = (props) => {
                         <img src={require('../../../Images/Artworkimages/piece-1.png')}
                             width='123'
                             height='196'
-                            alt='Book'
+                            alt='Artwork'
                         />
                     }
                 </div>
@@ -39,14 +40,14 @@ export const SearchArtwork: React.FC<{ artwork: ArtworkModel}> = (props) => {
             </div>
             <div className='col-md-6'>
                 <div className='card-body'>
-                    <h5 className='card-title'>
+                    <h5 className='card-text'>
                         {props.artwork.description}
                     </h5>
                     <h4>
                         {props.artwork.title}
                     </h4>
                     <p className='card-text'>
-                        {props.artwork.price}
+                      Price: {props.artwork.price} kr
                     </p>
                 </div>
             </div>

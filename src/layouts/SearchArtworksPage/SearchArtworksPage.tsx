@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ArtworkModel from "../../models/ArtworkModel";
 import { SpinnerLoading } from "../Utils/SpinnerLoading";
-import { SearchArtwork } from "./components/SearchBook";
+import { SearchArtwork } from "./components/SearchArtwork";
 import { Pagination } from "../Utils/Pagination";
 
 export const SearchArtworksPage = () => {
@@ -29,17 +29,14 @@ export const SearchArtworksPage = () => {
             }
 
             const responseJson = await response.json();
-            console.log(responseJson)
-
-            const responseData = responseJson;
+            const responseData = responseJson._embedded.artworks;
 
 
             setTotalAmountsOfArtworks(responseJson.page.totalElements);
             setTotalPages(responseJson.page.totalPages);
-         
+
 
             const loadedArtworks: ArtworkModel[] = [];
-
             for (const key in responseData) {
                 loadedArtworks.push({
                     id: responseData[key].id,
@@ -60,8 +57,8 @@ export const SearchArtworksPage = () => {
             setIsLoading(false);
             setHttpError(error.message)
         })
-
-    }, []);
+        window.scroll(0, 0);
+    }, [currentPage]);
 
     if (isLoading) {
         return (
@@ -132,10 +129,10 @@ export const SearchArtworksPage = () => {
                         </div>
                     </div>
                     <div className='mt-3'>
-                        <h5>Number of results(22)</h5>
+                        <h5>Number of results({totalAmountsOfArtworks})</h5>
                     </div>
                     <p>
-                        1 to 5 of 22 items:
+                        {indexOfFirstartwork + 1} to {lastItem} of {totalAmountsOfArtworks} items:
                     </p>
                     {artworks.map(artwork => (
                         <SearchArtwork artwork={artwork} key={artwork.id} />

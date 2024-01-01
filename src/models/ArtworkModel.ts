@@ -1,5 +1,5 @@
 class ArtworkModel {
-    id: string;
+    id: number;
     title: string;
     description?: string;
     category?: string;
@@ -7,7 +7,7 @@ class ArtworkModel {
     available?: boolean;
     img?: string;
 
-    constructor(id: string, title: string, description: string, category: string, price: number, available: boolean, img: string) {
+    constructor(id: number, title: string, description: string, category: string, price: number, available: boolean, img: string) {
         this.id = id;
         this.title = title;
         this.description = description;
