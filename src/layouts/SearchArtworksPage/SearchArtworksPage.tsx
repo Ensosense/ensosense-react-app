@@ -13,14 +13,23 @@ export const SearchArtworksPage = () => {
     const [artworksPerPage] = useState(5);
     const [totalAmountsOfArtworks, setTotalAmountsOfArtworks] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const [search, setSearch] = useState('');
+    const [searchUrl, setSearchUrl] = useState('');
+    const [categorySelection, setCategorySelection] = useState('Artwork category');
 
 
     useEffect(() => {
         const fetchArtworks = async () => {
-
             const baseUrl: string = "http://localhost:8080/api/artworks";
 
-            const url: string = `${baseUrl}?page=${currentPage - 1}&size=${artworksPerPage}`;
+            let url: string = '';
+
+            if (searchUrl === '') {
+                url = `${baseUrl}?page=${currentPage - 1}&size=${artworksPerPage}`;
+            } else {
+                let searchWithPage = searchUrl.replace('<pageNumber>', `${currentPage - 1}`);
+                url = baseUrl + searchWithPage;
+            }
 
             const response = await fetch(url);
 
@@ -58,7 +67,7 @@ export const SearchArtworksPage = () => {
             setHttpError(error.message)
         })
         window.scroll(0, 0);
-    }, [currentPage]);
+    }, [currentPage, searchUrl]);
 
     if (isLoading) {
         return (
@@ -71,6 +80,32 @@ export const SearchArtworksPage = () => {
                 <p>{httpError}</p>
             </div>
         )
+    }
+
+    const searchHandleChange = () => {
+        setCurrentPage(1);
+        if (search === '') {
+            setSearchUrl('')
+        } else {
+            setSearchUrl(`/search/findByTitleContaining?title=${search}&page=<pageNumber>&size${artworksPerPage}`)
+        }
+        setCategorySelection('Artwork category')
+    }
+
+    const categoryField = (value: string) => {
+        setCurrentPage(1);
+        if(
+            value.toLocaleLowerCase() === 'landscape' ||
+            value.toLocaleLowerCase() === 'abstract' ||
+            value.toLocaleLowerCase() === 'urban' ||
+            value.toLocaleLowerCase() === 'seascape' 
+        ) {
+            setCategorySelection(value);
+            setSearchUrl(`/search/findByCategory?category=${value}&page=<pageNumber>&size=${artworksPerPage}`)
+        } else{
+            setCategorySelection('All');
+            setSearchUrl(`?page=<pageNumber>&size=${artworksPerPage}`)
+        }
     }
 
     const indexOfLastArtwork: number = currentPage * artworksPerPage;
@@ -87,8 +122,9 @@ export const SearchArtworksPage = () => {
                         <div className='col-6'>
                             <div className='d-flex'>
                                 <input className='form-control me-2' type='search'
-                                    placeholder='Search' aria-labelledby='Search' />
-                                <button className='btn btn-outline-success'>
+                                    placeholder='Search' aria-labelledby='Search'
+                                    onChange={e => setSearch(e.target.value)} />
+                                <button className='btn btn-outline-success' onClick={() => searchHandleChange()}>
                                     Search
                                 </button>
                             </div>
@@ -96,47 +132,57 @@ export const SearchArtworksPage = () => {
                         <div className='col-4'>
                             <div className='dropdown'>
                                 <button className=' btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
-                                    Category
+                                    {categorySelection}
                                 </button>
                                 <ul className='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
-                                    <li>
+                                    <li onClick={() => categoryField('All')}>
                                         <a className='dropdown-item' href='#'>
                                             All
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categoryField('Landscape')}>
                                         <a className='dropdown-item' href='#'>
-                                            Front End
+                                            Landscape
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categoryField('Abstract')}>
                                         <a className='dropdown-item' href='#'>
-                                            Back End
+                                            Abstract
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categoryField('Urban')}>
                                         <a className='dropdown-item' href='#'>
-                                            Data
+                                            Urban
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categoryField('Seascape')}>
                                         <a className='dropdown-item' href='#'>
-                                            DevOps
+                                            Seascape
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div className='mt-3'>
-                        <h5>Number of results({totalAmountsOfArtworks})</h5>
-                    </div>
-                    <p>
-                        {indexOfFirstartwork + 1} to {lastItem} of {totalAmountsOfArtworks} items:
-                    </p>
-                    {artworks.map(artwork => (
-                        <SearchArtwork artwork={artwork} key={artwork.id} />
-                    ))}
+                    {totalAmountsOfArtworks > 0 ?
+                        <>
+                            <div className='mt-3'>
+                                <h5>Number of results({totalAmountsOfArtworks})</h5>
+                            </div>
+                            <p>
+                                {indexOfFirstartwork + 1} to {lastItem} of {totalAmountsOfArtworks} items:
+                            </p>
+                            {artworks.map(artwork => (
+                                <SearchArtwork artwork={artwork} key={artwork.id} />
+                            ))}
+                        </>
+                        :
+                        <div className='m-5'>
+                            <h3>Can't find what you are looking for?</h3>
+                            <a type='button' className='btn main-color btn-md px-4 me-md-2 fw-bold text-white' href="#">Artshop services</a>
+
+                        </div>
+                    }
                     {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />}
                 </div>
             </div>
