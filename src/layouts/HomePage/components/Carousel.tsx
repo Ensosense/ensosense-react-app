@@ -2,6 +2,7 @@ import { ReturnArtwork } from "./ReturnArtwork";
 import { useEffect, useState } from 'react';
 import ArtworkModel from "../../../models/ArtworkModel";
 import { SpinnerLoading } from "../../Utils/SpinnerLoading";
+import { Link } from "react-router-dom";
 
 
 export const Carousel = () => {
@@ -14,7 +15,7 @@ export const Carousel = () => {
 
         const fetchArtworks = async () => {
 
-            const baseUrl: string = "http://localhost:8080/artworks";
+            const baseUrl: string = "http://localhost:8080/api/artworks";
 
             const url: string = `${baseUrl}?page=0&size=9`;
 
@@ -26,7 +27,7 @@ export const Carousel = () => {
 
             const responseJson = await response.json();
 
-            const responseData = responseJson;
+            const responseData = responseJson._embedded.artworks;
 
             const loadedArtworks: ArtworkModel[] = [];
 
@@ -118,7 +119,7 @@ export const Carousel = () => {
                 </div>
             </div>
             <div className='homepage-carousel-title mt-3'>
-                <a className='btn btn-outline-secondary btn-lg' href='#'>View more</a>
+                <Link className='btn btn-outline-secondary btn-lg' to='/search'>View more</Link>
             </div>
         </div>
     );
