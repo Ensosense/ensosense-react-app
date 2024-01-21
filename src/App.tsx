@@ -4,12 +4,33 @@ import { Navbar } from './layouts/NavbarAndFooter/Navbar';
 import { Footer } from './layouts/NavbarAndFooter/Footer';
 import { HomePage } from './layouts/HomePage/HomePage';
 import { SearchArtworksPage } from './layouts/SearchArtworksPage/SearchArtworksPage';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import { ArtworkCheckoutPage } from './layouts/ArtworkCheckoutPage/ArtworkCheckoutPage';
+import { oktaConfig } from './shop/oktaConfig';
+import { OktaAuth, toRelativeUrl} from '@okta/okta-auth-js';
+import { Security, LoginCallback } from '@okta/okta-react';
+import LoginWidget from './Auth/LoginWidget';
+
+
+const oktaAuth = new OktaAuth(oktaConfig);
 
 export const App = () => {
+
+  const customAuthHandler = () => {
+    history.push('/login');
+  }
+
+  const history = useHistory();
+
+  
+  const restoreOriginalUri = async (_oktaAuth: any, originalUri: any) => {
+    history.replace(toRelativeUrl(originalUri || '/', window.location.origin));
+  };
+
+
   return (
     <div className='d-flex flex-column min-vh-100'>
+      <Security oktaAuth={oktaAuth} restoreOriginalUri={restoreOriginalUri} onAuthRequired={customAuthHandler}>
       <Navbar />
       <div className='flex-grow-1'>
         <Switch>
@@ -25,9 +46,15 @@ export const App = () => {
           <Route path='/checkout/:artworkId'>
             <ArtworkCheckoutPage/>
           </Route>
+          <Route path='/login' render={
+            () => <LoginWidget config={oktaConfig} />
+          }
+          />
+          <Route path='/login/callback' component={LoginCallback} />
         </Switch>
       </div>
       <Footer />
+      </Security>
     </div>
   );
 }
