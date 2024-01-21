@@ -1,5 +1,10 @@
+import { useOktaAuth } from "@okta/okta-react";
+import { Link } from "react-router-dom";
 
 export const Heros = () => {
+
+    const { authState } = useOktaAuth();
+
     return (
         <div>
             <div className='d-none d-lg-block'>
@@ -13,8 +18,11 @@ export const Heros = () => {
                             <p className='lead'>
                             Connect with us at Ensosense and share your inspirations. Whether it's about your artistic passions or creative influences, we're here to curate the perfect collection that resonates with your unique vision!
                             </p>
-                        
-                                <a className='btn main-color btn-lg text-white' href='#'>Sign up</a>
+                            {authState?.isAuthenticated ?
+                        <Link type='button' className='btn main-color btn-lg text-white' to='search'>Explore popular Artworks</Link>  
+                        :
+                        <Link className='btn main-color btn-lg text-white' to='/login'>Sign up</Link>
+                        }
                         </div>
                     </div>
                 </div>
@@ -42,11 +50,13 @@ export const Heros = () => {
                         <div className='mt-2'>
                             <h1>Immerse yourself in the world of artistry!</h1>
                             <p className='lead'>
-                             Connect with us at Ensosense and share your inspirations. Whether it's about your artistic passions or creative influences, we're here to curate the perfect collection that resonates with your unique vision.!
+                             Connect with us at Ensosense and share your inspirations. Whether it's about your artistic passions or creative influences, we're here to curate the perfect collection that resonates with your unique vision!
                             </p>
-                          
-                                <a className='btn main-color btn-lg text-white'
-                                    href='#'>Sign up</a>
+                          {authState?.isAuthenticated ?
+                        <Link type='button' className='btn main-color btn-lg text-white' to='search'>Explore popular Artworks</Link>  
+                        :
+                        <Link className='btn main-color btn-lg text-white' to='/login'>Sign up</Link>
+                        }
                             </div>
                     </div>
                     <div className='m-2'>

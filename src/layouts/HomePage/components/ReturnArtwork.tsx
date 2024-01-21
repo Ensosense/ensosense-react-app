@@ -1,5 +1,6 @@
 import React from 'react'
 import ArtworkModel from '../../../models/ArtworkModel';
+import { Link } from 'react-router-dom';
 
 
 
@@ -24,7 +25,7 @@ export const ReturnArtwork: React.FC<{ artwork: ArtworkModel }> = (props) => {
                 }
                 <h6 className='mt-2'>{props.artwork.title}</h6>
                 <p>{props.artwork.description}</p>
-                <a className='btn main-color text-white' href='#'>Reserve</a>
+                <Link className='btn main-color text-white' to={`checkout/${props.artwork.id}`}>Add to cart</Link>
             </div>
         </div>
     );
