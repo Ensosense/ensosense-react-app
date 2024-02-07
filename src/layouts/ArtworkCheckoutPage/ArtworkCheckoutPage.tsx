@@ -20,6 +20,8 @@ export const ArtworkCheckoutPage = () => {
     const [totalStars, setTotalStars] = useState(0);
     const [isLoadingReview, setIsLoadingReview] = useState(true);
 
+    // Is book Check out
+    const [isCheckedOut, setIsCheckedOut] = useState(false);
     
     const artworkId = (window.location.pathname).split('/')[2];
 
@@ -58,7 +60,7 @@ export const ArtworkCheckoutPage = () => {
             setHttpError(error.message)
         })
 
-    }, []);
+    }, [isCheckedOut]);
 
     useEffect(() => {
         const fetchArtworkReviews = async () => {
@@ -120,6 +122,22 @@ export const ArtworkCheckoutPage = () => {
         )
     }
 
+    async function checkoutArtwork() {
+        const url = `http://localhost:8080/api/artworks/secure/checkout/?artworkId=${artwork?.id}`;
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+                'Content-Type':'application/json'
+            }
+        };
+        const checkoutResponse = await fetch(url, requestOptions);
+        if (!checkoutResponse.ok){
+            throw new Error('Something went wrong!')
+        }
+        setIsCheckedOut(true);
+    }
+
     return (
         <div>
             <div className='container d-none d-lg-block'>
@@ -140,10 +158,9 @@ export const ArtworkCheckoutPage = () => {
                             <StarsReview rating={totalStars} size={32} />
                         </div>
                     </div>
-                    <CheckoutAndReviewBox artwork={artwork} mobile={false} isAuthenticated={authState?.isAuthenticated} />
-                    {/*  <CheckoutAndReviewBox book={book} mobile={false} currentLoansCount={currentLoansCount} 
-                    isAuthenticated={authState?.isAuthenticated} isCheckedOut={isCheckedOut} 
-                    checkoutBook={checkoutBook} isReviewLeft={isReviewLeft} submitReview={submitReview}/> */}
+                    <CheckoutAndReviewBox artwork={artwork} mobile={false} isAuthenticated={authState?.isAuthenticated} isCheckedOut={isCheckedOut} checkoutArtwork={checkoutArtwork} />
+                    {/*   
+                    isReviewLeft={isReviewLeft} submitReview={submitReview}/> */}
                 </div>
                 <hr />
                 <LatestReviews reviews={reviews} artworkId={artwork?.id} mobile={false} />
@@ -165,9 +182,8 @@ export const ArtworkCheckoutPage = () => {
                         <StarsReview rating={totalStars} size={32} />
                     </div>
                 </div>
-                <CheckoutAndReviewBox artwork={artwork} mobile={true} isAuthenticated={authState?.isAuthenticated} />
-                {/*  <CheckoutAndReviewBox book={book} mobile={true} currentLoansCount={currentLoansCount} 
-                isAuthenticated={authState?.isAuthenticated} isCheckedOut={isCheckedOut} 
+                <CheckoutAndReviewBox artwork={artwork} mobile={true} isAuthenticated={authState?.isAuthenticated} isCheckedOut={isCheckedOut}  checkoutArtwork={checkoutArtwork} />
+                {/* 
                 checkoutBook={checkoutBook} isReviewLeft={isReviewLeft} submitReview={submitReview}/> */}
                 <hr />
                 <LatestReviews reviews={reviews} artworkId={artwork?.id} mobile={true} />
