@@ -53,7 +53,7 @@ export const SearchArtworksPage = () => {
                     description: responseData[key].description,
                     category: responseData[key].category,
                     price: responseData[key].price,
-                    available: responseData[key].available,
+                    copiesAvailable: responseData[key].copiesAvailable,
                     img: responseData[key].img,
                 });
             }

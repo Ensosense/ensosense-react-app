@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import ArtworkModel from "../../models/ArtworkModel";
 import { SpinnerLoading } from "../Utils/SpinnerLoading";
 import { StarsReview } from "../Utils/StarsReview";
-import { CheckoutAndReviewBox } from "./CheckoutAndReview";
+import { CheckoutAndReviewBox } from "./CheckoutAndReviewBox";
 import ReviewModel from "../../models/ReviewModel";
 import { LatestReviews } from "./LatestReviews";
+import { useOktaAuth } from "@okta/okta-react";
 
 export const ArtworkCheckoutPage = () => {
+
+    const { authState } = useOktaAuth();
 
     const [artwork, setArtwork] = useState<ArtworkModel>();
     const [isLoading, setIsLoading] = useState(true);
@@ -17,6 +20,7 @@ export const ArtworkCheckoutPage = () => {
     const [totalStars, setTotalStars] = useState(0);
     const [isLoadingReview, setIsLoadingReview] = useState(true);
 
+    
     const artworkId = (window.location.pathname).split('/')[2];
 
     useEffect(() => {
@@ -40,7 +44,7 @@ export const ArtworkCheckoutPage = () => {
                 description: responseJson.description,
                 category: responseJson.category,
                 price: responseJson.price,
-                available: responseJson.available,
+                copiesAvailable: responseJson.copiesAvailable,
                 img: responseJson.img,
             };
 
@@ -136,7 +140,7 @@ export const ArtworkCheckoutPage = () => {
                             <StarsReview rating={totalStars} size={32} />
                         </div>
                     </div>
-                    <CheckoutAndReviewBox artwork={artwork} mobile={false} />
+                    <CheckoutAndReviewBox artwork={artwork} mobile={false} isAuthenticated={authState?.isAuthenticated} />
                     {/*  <CheckoutAndReviewBox book={book} mobile={false} currentLoansCount={currentLoansCount} 
                     isAuthenticated={authState?.isAuthenticated} isCheckedOut={isCheckedOut} 
                     checkoutBook={checkoutBook} isReviewLeft={isReviewLeft} submitReview={submitReview}/> */}
@@ -161,7 +165,7 @@ export const ArtworkCheckoutPage = () => {
                         <StarsReview rating={totalStars} size={32} />
                     </div>
                 </div>
-                <CheckoutAndReviewBox artwork={artwork} mobile={true} />
+                <CheckoutAndReviewBox artwork={artwork} mobile={true} isAuthenticated={authState?.isAuthenticated} />
                 {/*  <CheckoutAndReviewBox book={book} mobile={true} currentLoansCount={currentLoansCount} 
                 isAuthenticated={authState?.isAuthenticated} isCheckedOut={isCheckedOut} 
                 checkoutBook={checkoutBook} isReviewLeft={isReviewLeft} submitReview={submitReview}/> */}
