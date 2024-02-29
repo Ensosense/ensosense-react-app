@@ -188,9 +188,9 @@ export const ArtworkCheckoutPage = () => {
                             <StarsReview rating={totalStars} size={32} />
                         </div>
                     </div>
-                    <CheckoutAndReviewBox artwork={artwork} mobile={false} isAuthenticated={authState?.isAuthenticated} isCheckedOut={isCheckedOut} checkoutArtwork={checkoutArtwork} />
-                    {/*   
-                    isReviewLeft={isReviewLeft} submitReview={submitReview}/> */}
+                    <CheckoutAndReviewBox artwork={artwork} mobile={false} isAuthenticated={authState?.isAuthenticated} isCheckedOut={isCheckedOut} checkoutArtwork={checkoutArtwork} isReviewLeft={isReviewLeft} />
+                    {   
+                     /* submitReview={submitReview}/> */}
                 </div>
                 <hr />
                 <LatestReviews reviews={reviews} artworkId={artwork?.id} mobile={false} />
@@ -212,9 +212,9 @@ export const ArtworkCheckoutPage = () => {
                         <StarsReview rating={totalStars} size={32} />
                     </div>
                 </div>
-                <CheckoutAndReviewBox artwork={artwork} mobile={true} isAuthenticated={authState?.isAuthenticated} isCheckedOut={isCheckedOut}  checkoutArtwork={checkoutArtwork} />
-                {/* 
-                checkoutBook={checkoutBook} isReviewLeft={isReviewLeft} submitReview={submitReview}/> */}
+                <CheckoutAndReviewBox artwork={artwork} mobile={true} isAuthenticated={authState?.isAuthenticated} isCheckedOut={isCheckedOut}  checkoutArtwork={checkoutArtwork} isReviewLeft={isReviewLeft}/>
+                {
+              /*  checkoutBook={checkoutBook}  */ /* submitReview={submitReview}/> */}
                 <hr />
                 <LatestReviews reviews={reviews} artworkId={artwork?.id} mobile={true} />
             </div>
