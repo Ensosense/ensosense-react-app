@@ -22,7 +22,7 @@ export const ArtworkCheckoutPage = () => {
     const [isLoadingReview, setIsLoadingReview] = useState(true);
 
     const [isReviewLeft , setIsReviewLeft] = useState(false);
-    const [isLoadingUserReview, setIsLoadUserReview] = useState(true)
+    const [isLoadingUserReview, setIsLoadingUserReview] = useState(true)
 
     // Is book Check out
     const [isCheckedOut, setIsCheckedOut] = useState(false);
@@ -111,19 +111,35 @@ export const ArtworkCheckoutPage = () => {
             setIsLoadingReview(false);
             setHttpError(error.message);
         })
-    }, []);
+    }, [isReviewLeft]);
 
     useEffect(() => {
         const fetchUserReviewArtwork = async () => {
-
+            if (authState && authState.isAuthenticated) {
+                const url = `http://localhost:8080/api/reviews/secure/user/artwork/?artworkId=${artworkId}`;
+                const requestOptions = {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${authState.accessToken?.accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                };
+                const userReview = await fetch(url, requestOptions);
+                if (!userReview.ok) {
+                    throw new Error('Something went wrong');
+                }
+                const userReviewResponseJson = await userReview.json();
+                setIsReviewLeft(userReviewResponseJson);
+            }
+            setIsLoadingUserReview(false);
         }
         fetchUserReviewArtwork().catch((error:any) => {
-            setIsLoadUserReview(false);
+            setIsLoadingUserReview(false);
             setHttpError(error.message)
         })
 }, [authState]);
 
-    if (isLoading || isLoadingReview) {
+    if (isLoading || isLoadingReview || isLoadingUserReview) {
         return (
             <SpinnerLoading />
         )
