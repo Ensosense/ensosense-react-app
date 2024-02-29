@@ -10,13 +10,13 @@ export const SearchArtwork: React.FC<{artwork: ArtworkModel}> = (props) => {
                 <div className='d-none d-lg-block'>
                     {props.artwork.img ?
                         <img src={props.artwork.img}
-                            width='123'
+                            width='150'
                             height='196'
                             alt='Artwork'
                         />
                         :
                         <img src={require('../../../Images/Artworkimages/piece-1.png')}
-                            width='123'
+                            width='150'
                             height='196'
                             alt='Artwork'
                         />

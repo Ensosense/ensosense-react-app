@@ -6,6 +6,7 @@ import { CheckoutAndReviewBox } from "./CheckoutAndReviewBox";
 import ReviewModel from "../../models/ReviewModel";
 import { LatestReviews } from "./LatestReviews";
 import { useOktaAuth } from "@okta/okta-react";
+import { error } from "console";
 
 export const ArtworkCheckoutPage = () => {
 
@@ -19,6 +20,9 @@ export const ArtworkCheckoutPage = () => {
     const [reviews, setReviews] = useState<ReviewModel[]>([]);
     const [totalStars, setTotalStars] = useState(0);
     const [isLoadingReview, setIsLoadingReview] = useState(true);
+
+    const [isReviewLeft , setIsReviewLeft] = useState(false);
+    const [isLoadingUserReview, setIsLoadUserReview] = useState(true)
 
     // Is book Check out
     const [isCheckedOut, setIsCheckedOut] = useState(false);
@@ -108,6 +112,16 @@ export const ArtworkCheckoutPage = () => {
             setHttpError(error.message);
         })
     }, []);
+
+    useEffect(() => {
+        const fetchUserReviewArtwork = async () => {
+
+        }
+        fetchUserReviewArtwork().catch((error:any) => {
+            setIsLoadUserReview(false);
+            setHttpError(error.message)
+        })
+}, [authState]);
 
     if (isLoading || isLoadingReview) {
         return (

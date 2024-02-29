@@ -34,7 +34,7 @@ background-color: rgb(116, 126, 109) ;
 .lost-image {
     background-image: url("./Images/PublicImages/image-3.jpg");
     height: 25em !important;
-    width: "720"
+    width: "720";
 }
 
 .homepage-carousel-title {
